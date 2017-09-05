@@ -118,7 +118,7 @@ function AuthWPUserLogout(&$user) {
 class AuthWP extends AuthPlugin {
 
 	// Constructor
-	function AuthWP(){
+	function __constructor(){
 
 		// Add hooks...
 		global $wgHooks;
@@ -135,7 +135,7 @@ class AuthWP extends AuthPlugin {
 	}
 
 	// MediaWiki API HANDLER
-	// Handle authentication, returning true if the given credentials
+    // Handle authentication, returning true if the given credentials
 	// are good, or false if they're bad.
 	function authenticate($username,$password) {
 		$credentials=array('user_login'=>$username,'user_password'=>$password);
@@ -145,8 +145,9 @@ class AuthWP extends AuthPlugin {
 	}
 
 	// MediaWiki API HANDLER
-	// Modify the login template...
-	function modifyUITemplate(&$template) {
+    // Modify the login template...
+    // $type is 'signup' or 'ogin'
+	function modifyUITemplate(&$template, &$type) {
 		$template->set('create',false);
 		$template->set('usedomain',false);
 		$template->set('useemail',true);
@@ -210,8 +211,9 @@ class AuthWP extends AuthPlugin {
 
 	// MediaWiki API HANDLER
 	// Add a user created in MediaWiki to the Wordpress database...
-	function addUser($user,$password) {
-		wp_create_user($user->mName,$password,$user->mEmail);
+	function addUser($user,$password, $email = '', $realName = '') {
+	    //wp_create_user($user->mName,$password,$user->mEmail);
+	    wp_create_user($user->mName, $password, $email);
 		return true;
 	}
 
